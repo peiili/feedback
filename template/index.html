@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>反馈</title>
+    <link href="//cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+    <script src="//cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.3.3/js/bootstrap.min.js"></script>
+    <style>
+        .banner {
+            height: 100px;
+            background-image: url(//xek.dlsjf.top/net_image/20220512150531_6611e0%40hixlarge.jpeg);
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        .form-check {
+            margin: 10px 0;
+        }
+
+        .custom-label {}
+    </style>
+</head>
+
+<body>
+    <div class="text-center">
+        <img src="//xek.dlsjf.top/net_image/20220512150531_6611e0%40hixlarge.jpeg" class="img-fluid" alt="...">
+    </div>
+    <div class="container">
+        <p class="h5 text-center pt-4"><strong>投诉内容：MBTI十六人格测试</strong></p>
+        <p class="fs-6 fw-light">为优化产品，如您在使用产品的过程中有什么问题或疑问，可及时反馈给我们，我们会敦促商家及时改正，可在24小时后查看反馈处理结果</p>
+        <form class="mt-4" id="form">
+            <p class="h6"><strong>请选择您遇到的问题</strong></p>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="支付成功商家未提供商品服务" name="check" id="flexCheck1">
+                <label class="form-check-label" for="flexCheck1">
+                    支付成功商家未提供商品服务
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="信息填写错误" name="check" id="flexCheck2">
+                <label class="form-check-label" for="flexCheck2">
+                    信息填写错误
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="重复购买、二次付款" name="check" id="flexCheck4">
+                <label class="form-check-label" for="flexCheck4">
+                    重复购买、二次付款
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="不满意商家的产品及服务" name="check" id="flexCheck5">
+                <label class="form-check-label" for="flexCheck5">
+                    不满意商家的产品及服务
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="非本人支付" name="check" id="flexCheck6">
+                <label class="form-check-label" for="flexCheck6">
+                    非本人支付
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="其他问题" name="check" id="flexCheck7">
+                <label class="form-check-label" for="flexCheck7">
+                    其他问题
+                </label>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">简要描述</label>
+                <textarea class="form-control" name="desc" rows="3"></textarea>
+            </div>
+            <p class="h6"><strong>证据截图</strong></p>
+            <div class="mb-3">
+                <input type="file" class="form-control" name="snipaste" id="exampleInputPassword1">
+            </div>
+            <p class="h6"><strong>联系方式手机号</strong></p>
+            <div class="input-group mb-3">
+                <input type="number" class="form-control" name="phone" aria-label="Text input with dropdown button">
+            </div>
+            <div class="d-grid gap-2">
+                <button class="btn btn-primary" type="button">提交</button>
+            </div>
+        </form>
+        <div class="my-5 text-center">人格测试联盟©</div>
+        <div class="my-5"></div>
+    </div>
+</body>
+
+</html>
+<script>
+    var form = document.getElementById('form')
+    var submit = document.querySelector('.btn-primary')
+
+    var fileInput = document.getElementById('exampleInputPassword1')
+    var base64 = ''
+    var fileread = new FileReader()
+    fileInput.onchange = function () {
+        fileread.onload = function (e) {
+            base64 = e.target.result
+        }
+        fileread.readAsDataURL(this.files[0])
+    }
+
+    submit.onclick = function () {
+
+        var hobbies = [];
+        var checkboxes = document.querySelectorAll('input[name="check"]:checked');
+        checkboxes.forEach(function (checkbox) {
+            hobbies.push(checkbox.value);
+        });
+        var datetime = new Date()
+        var year = datetime.getFullYear()
+        var month = datetime.getMonth()+1
+        var day = datetime.getDate()
+        var hours = datetime.getHours()
+        var minute = datetime.getMinutes()
+        var seconds = datetime.getSeconds()
+        var body = {
+            'time': `${year}-${month}-${day} ${hours}:${minute}:${seconds}`,
+            'check': JSON.stringify(hobbies),
+            'desc': form.elements['desc'].value,
+            'snipaste': base64,
+            'phone': form.elements['phone'].value,
+        }
+        fetch('http://192.168.1.7:4333/feedback/form', {
+            method: 'POST',
+            body:  JSON.stringify(body)
+        })
+            .then(response => response.json())
+            .then(data => {
+                if(data.code===200){
+                    location.href = '/feedback/result'
+                }
+                console.log(data)
+            })
+            .catch(error => console.error(error));
+
+
+    }
+</script>
