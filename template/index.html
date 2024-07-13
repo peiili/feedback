@@ -106,7 +106,6 @@
     }
 
     submit.onclick = function () {
-
         var hobbies = [];
         var checkboxes = document.querySelectorAll('input[name="check"]:checked');
         checkboxes.forEach(function (checkbox) {
@@ -122,11 +121,11 @@
         var body = {
             'time': `${year}-${month}-${day} ${hours}:${minute}:${seconds}`,
             'check': JSON.stringify(hobbies),
-            'desc': form.elements['desc'].value,
+            'desc': form.elements['desc'].value.trim(),
             'snipaste': base64,
             'phone': form.elements['phone'].value,
         }
-        fetch('http://192.168.1.7:4333/feedback/form', {
+        fetch('/feedback/form', {
             method: 'POST',
             body:  JSON.stringify(body)
         })
@@ -135,10 +134,8 @@
                 if(data.code===200){
                     location.href = '/feedback/result'
                 }
-                console.log(data)
             })
             .catch(error => console.error(error));
-
 
     }
 </script>

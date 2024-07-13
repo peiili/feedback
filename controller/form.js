@@ -15,10 +15,23 @@ const From = function(req, res){
         var year = datetime.getFullYear()
         var month = datetime.getMonth()+1
         var day = datetime.getDate()
-
+        body = JSON.parse(body.toString())
+        var notAllow = keywordsArray.some((e)=>{
+            return e&&body.desc.indexOf(e)>-1
+        })
+        if(notAllow){
+            res.end(JSON.stringify({
+                code: 200,
+            }))
+            return 
+        }
+        const data = {
+            ...body,
+            time: body.time,
+            ip: req.headers['x-real-ip']||''
+        }
         const path = `${year}-${month}-${day}-feedback.log`
-        console.log(body.toString());
-        fs.appendFile(path, body.toString()+'\n',()=>{
+        fs.appendFile(path, JSON.stringify(data)+'\n',()=>{
 
         })
         res.end(JSON.stringify({
