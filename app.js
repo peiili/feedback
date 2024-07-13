@@ -13,7 +13,7 @@ const serve = http.createServer((req, res)=>{
             form(req, res)  
         }
     } else if(method==='get'){
-        if(req.url==='/feedback') {
+        if(req.url==='/feedback'||req.url==='/feedback/') {
             index(req, res)
         } else if(req.url==='/feedback/result') {
             result(req, res)

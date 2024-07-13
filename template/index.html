@@ -94,18 +94,33 @@
 <script>
     var form = document.getElementById('form')
     var submit = document.querySelector('.btn-primary')
-
+    var timer = 0;
+    var throttle = false;
     var fileInput = document.getElementById('exampleInputPassword1')
     var base64 = ''
     var fileread = new FileReader()
     fileInput.onchange = function () {
+        throttle = true
+        submit.innerHTML = '图片上传中'
         fileread.onload = function (e) {
             base64 = e.target.result
+            submit.innerHTML = '提交'
+            throttle = false
         }
         fileread.readAsDataURL(this.files[0])
     }
 
     submit.onclick = function () {
+        submit.innerHTML = '提交中'
+        if(throttle){
+            return
+        }
+        clearTimeout(timer)
+        throttle = true;
+        timer = setTimeout(()=>{
+            submit.innerHTML = '提交'
+            throttle = false;
+        }, 15000)
         var hobbies = [];
         var checkboxes = document.querySelectorAll('input[name="check"]:checked');
         checkboxes.forEach(function (checkbox) {
@@ -132,10 +147,15 @@
             .then(response => response.json())
             .then(data => {
                 if(data.code===200){
+                    clearTimeout(timer)
                     location.href = '/feedback/result'
                 }
             })
-            .catch(error => console.error(error));
+            .catch(error => {
+                clearTimeout(timer)
+                submit.innerHTML = '提交'
+                throttle = false;
+            });
 
     }
 </script>
