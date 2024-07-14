@@ -15,12 +15,12 @@ const Index = function(req, res){
                 try {
                     const row =JSON.parse(_content[i]);
                     tempalte+= `
-                        <div class="margin-bottom: 10px; border: 1px solid #ccc">
-                            <div>时间： ${row.time}</div>
-                            <div>手机：${row.phone}</div>
-                            <div>多选：${row.check}</div>
-                            <div>详情：${row.desc}</div>
-                            <div>ip：${row.ip}</div>
+                        <div style="margin-bottom: 10px; border: 1px solid #ccc;padding: 10px">
+                            <div> <b> 时间：</b>  ${row.time}</div>
+                            <div> <b> 手机：</b> ${row.phone}</div>
+                            <div> <b> 多选：</b> ${row.check}</div>
+                            <div> <b> 详情：</b> ${row.desc}</div>
+                            <div> <b> ip：</b> ${row.ip}</div>
                             <div>
                             <img src="${row.snipaste}" style="width:50%" />
                             </div>

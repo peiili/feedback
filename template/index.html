@@ -75,7 +75,7 @@
             </div>
             <p class="h6"><strong>证据截图</strong></p>
             <div class="mb-3">
-                <input type="file" class="form-control" name="snipaste" id="exampleInputPassword1">
+                <input type="file" accept="image/*" class="form-control" name="snipaste" id="exampleInputPassword1">
             </div>
             <p class="h6"><strong>联系方式手机号</strong></p>
             <div class="input-group mb-3">
@@ -97,17 +97,35 @@
     var timer = 0;
     var throttle = false;
     var fileInput = document.getElementById('exampleInputPassword1')
-    var base64 = ''
+    var binary = new ArrayBuffer();
     var fileread = new FileReader()
+    var filePath = ''
     fileInput.onchange = function () {
         throttle = true
         submit.innerHTML = '图片上传中'
+        const file = this.files[0]
+        console.log(file.name);
         fileread.onload = function (e) {
-            base64 = e.target.result
-            submit.innerHTML = '提交'
-            throttle = false
+            binary = e.target.result
+          
+            fetch('/feedback/upload?name='+file.name, {
+                method: 'POST',
+                body: binary
+            })
+            .then(response => response.json())
+            .then(data => {
+                if(data.code===200){
+                    submit.innerHTML = '提交'
+                    throttle = false
+                    filePath = data.data
+                }
+            })
+            .catch(error => {
+                submit.innerHTML = '提交'
+                throttle = false;
+            });
         }
-        fileread.readAsDataURL(this.files[0])
+        fileread.readAsArrayBuffer(this.files[0])
     }
 
     submit.onclick = function () {
@@ -137,7 +155,7 @@
             'time': `${year}-${month}-${day} ${hours}:${minute}:${seconds}`,
             'check': JSON.stringify(hobbies),
             'desc': form.elements['desc'].value.trim(),
-            'snipaste': base64,
+            'snipaste': filePath,
             'phone': form.elements['phone'].value,
         }
         fetch('/feedback/form', {
