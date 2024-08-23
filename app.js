@@ -23,7 +23,7 @@ const serve = http.createServer((req, res)=>{
             index(req, res)
         } else if(req.url==='/feedback/result') {
             result(req, res)
-        } else if(req.url==='/feedback/list') {
+        } else if(/\/feedback\/list\/*/.test(req.url)) {
             list(req, res)
         } else if(/\/feedback\/attachment\/*/.test(req.url)) {
             attachment(req, res)
