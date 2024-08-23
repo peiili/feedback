@@ -24,7 +24,7 @@ const Index = function(req, res){
                     tempalte+= `
                         <div style="margin-bottom: 10px; border: 1px solid #ccc;padding: 10px">
                             <div> <b> 时间：</b>  ${row.time}</div>
-                            <div> <b> 手机：</b> ${row.phone}</div>
+                            <div>  <b> 手机：</b><span style="color:red" >${row.phone}</span></div>
                             <div> <b> 多选：</b> ${row.check}</div>
                             <div> <b> 详情：</b> ${row.desc}</div>
                             <div> <b> ip：</b> ${row.ip}</div>
