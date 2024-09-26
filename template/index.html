@@ -29,7 +29,7 @@
         <img src="//xek.dlsjf.top/net_image/20220512150531_6611e0%40hixlarge.jpeg" class="img-fluid" alt="...">
     </div>
     <div class="container">
-        <p class="h5 text-center pt-4"><strong>投诉内容：MBTI十六人格测试</strong></p>
+        <p class="h5 text-center pt-4"><strong>反馈内容：MBTI十六人格测试</strong></p>
         <p class="fs-6 fw-light">为优化产品服务，如您在使用产品的过程中有什么问题或疑问，可及时反馈给我们，我们会敦促商家及时改正，可在24小时后查看反馈处理结果。<span style="color:red">若涉及到支付问题，请务必上传支付凭证和手机号，否则商家无法与您取得联系</span></p>
         <form class="mt-4" id="form">
             <p class="h6"><strong>请选择您遇到的问题</strong></p>
@@ -64,6 +64,12 @@
                 </label>
             </div>
             <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="仅退款" name="check" id="flexCheck8">
+                <label class="form-check-label" for="flexCheck8">
+                    仅退款
+                </label>
+            </div>
+            <div class="form-check">
                 <input class="form-check-input" type="checkbox" value="其他问题" name="check" id="flexCheck7">
                 <label class="form-check-label" for="flexCheck7">
                     其他问题
@@ -73,7 +79,7 @@
                 <label class="form-label">简要描述</label>
                 <textarea class="form-control" name="desc" rows="3"></textarea>
             </div>
-            <p class="h6"><strong>证据截图</strong></p>
+            <p class="h6"><strong>凭证截图</strong><a href="http://xek.dlsjf.top/pay-guide.png"> &nbsp;示例</a></p>
             <div class="mb-3">
                 <input type="file" accept="image/*" class="form-control" name="snipaste" id="exampleInputPassword1">
             </div>
@@ -144,6 +150,27 @@
         checkboxes.forEach(function (checkbox) {
             hobbies.push(checkbox.value);
         });
+
+        switch (true) {
+            case hobbies.includes('仅退款'):
+            case hobbies.includes('非本人支付'):
+            case hobbies.includes('支付成功商家未提供商品服务'):
+                console.log('111');
+                
+                if(!filePath){
+                    clearTimeout(timer)
+                    submit.innerHTML = '提交'
+                    throttle = false;
+                    alert('支付相关请上传支付凭证截图')
+                    
+                    return
+
+                }
+                break;
+        
+            default:
+                break;
+        }
         var datetime = new Date()
         var year = datetime.getFullYear()
         var month = datetime.getMonth()+1
@@ -166,6 +193,8 @@
             .then(data => {
                 if(data.code===200){
                     clearTimeout(timer)
+                    submit.innerHTML = '提交'
+                    throttle = false;
                     location.href = '/feedback/result'
                 }
             })

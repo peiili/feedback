@@ -28,7 +28,7 @@ const Index = function(req, res){
                             <div> <b> 详情：</b> ${row.desc}</div>
                             <div> <b> ip：</b> ${row.ip}</div>
                             <div>
-                            <img src="${row.snipaste}" style="width:50%" />
+                                <img src="${row.snipaste}" style="width:50%" />
                             </div>
                         </div>
                     `
