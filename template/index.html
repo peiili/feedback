@@ -184,6 +184,7 @@
             'desc': form.elements['desc'].value.trim(),
             'snipaste': filePath,
             'phone': form.elements['phone'].value,
+            'host': location.href,
         }
         fetch('/feedback/form', {
             method: 'POST',

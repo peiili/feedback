@@ -17,6 +17,7 @@ const Index = function(req, res){
         const content = fs.readFileSync(path, { encoding: 'utf-8' })
         if(content.length>0){
             var _content = content.split(/\n/g)
+            _content.reverse()
             for (let i = 0; i < _content.length; i++) {
                 try {
                     const row =JSON.parse(_content[i]);
@@ -27,6 +28,7 @@ const Index = function(req, res){
                             <div> <b> 多选：</b> ${row.check}</div>
                             <div> <b> 详情：</b> ${row.desc}</div>
                             <div> <b> ip：</b> ${row.ip}</div>
+                            <div> <b> host：</b> ${row.host}</div>
                             <div>
                                 <img src="${row.snipaste}" style="width:50%" />
                             </div>
