@@ -19,7 +19,7 @@ const serve = http.createServer((req, res)=>{
             upload(req, res)
         }
     } else if(method==='get'){
-        if(/^\/feedback(?:\?id=(\d+)?)?$/.test(req.url)) {
+        if(/^\/feedback(?:\?sn_id=(\d+)?)?$/.test(req.url)) {
             index(req, res)
         } else if(req.url==='/feedback/result') {
             result(req, res)
