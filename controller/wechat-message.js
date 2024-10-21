@@ -10,7 +10,7 @@ function sendMsg(aToken, content) {
         {
             thing4: { value: content.ip },
             time16: { value: content.time },
-            thing11: { value: content.phone },
+            thing11: { value: content.phone|| '无' },
             thing29: { value: content.host.substr(-10) }
         }
     })
