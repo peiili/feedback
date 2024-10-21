@@ -46,7 +46,7 @@ function getAccessToken(cb) {
         let body = Buffer.alloc(0)
 
         res.on('data', function (chunk) {
-            Buffer.concat([body, chunk])
+            body = Buffer.concat([body, chunk])
         })
 
         res.on('end', function () {

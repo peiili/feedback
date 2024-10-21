@@ -33,8 +33,11 @@ const From = function(req, res){
             ip: req.headers['x-real-ip']||''
         }
         const path = `${year}-${month}-${day}-feedback.log`
-
-        wechatMessage(data)
+            try {
+                wechatMessage(data)
+            } catch (error) {
+                
+            }
 
         fs.appendFile(path, JSON.stringify(data)+'\n',()=>{
 
