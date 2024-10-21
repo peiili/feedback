@@ -36,7 +36,7 @@ const From = function(req, res){
             try {
                 wechatMessage(data)
             } catch (error) {
-                
+                console.error(error);
             }
 
         fs.appendFile(path, JSON.stringify(data)+'\n',()=>{

@@ -2,31 +2,7 @@ var https = require("https");
 var http = require("http");
 
 function sendMsg(aToken, content) {
-    console.log(content);
-    var options = {
-        method: "POST",
-        hostname: 'api.weixin.qq.com',
-        path: '/cgi-bin/message/template/send?access_token=' + aToken,
-        headers: {
-            "Content-Type": "application/json",
-            "cache-control": "no-cache",
-        }
-    };
-
-    var req = https.request(options, function (res) {
-        var chunks = [];
-
-        res.on("data", function (chunk) {
-            chunks.push(chunk);
-        });
-
-        res.on("end", function () {
-            var body = Buffer.concat(chunks);
-            console.log(body.toString());
-        });
-    });
-
-    req.write(JSON.stringify({
+    const params = JSON.stringify({
         touser: 'oz-at6HdNgIu24LT84xo9bryTGwE',
         template_id: 'SOp7WDJMT1cBvtDvEa7mpH2nLiMZRgZpJiiDPmZOudU',
         url: 'http://test.mbti.ink/feedback/list',
@@ -37,7 +13,32 @@ function sendMsg(aToken, content) {
             thing11: { value: content.phone },
             thing29: { value: content.host.substr(-10) }
         }
-    }));
+    })
+    var options = {
+        hostname: 'api.weixin.qq.com',
+        path: '/cgi-bin/message/template/send?access_token=' + aToken,
+        method: "post",
+        "headers": {
+            "Content-Type": "application/json",
+            'Content-Length': Buffer.byteLength(params),
+          }
+    };
+    var req = https.request(options, function (res) {
+        var chunks = [];
+        res.on("data", function (chunk) {
+            chunks.push(chunk);
+        });
+
+        res.on("end", function () {
+            console.log(chunks.toString());
+        });
+    });
+
+ 
+    req.on('error', function(err){
+        console.error(err);
+    })
+    req.write(params);
     req.end();
 }
 
