@@ -11,7 +11,7 @@ const Index = function(req, res){
     var day = datetime.getDate()
     const path = `${year}-${month}-${day}-feedback.log`
     const state = fs.existsSync(path)
-    var tempalte = '<!DOCTYPE html><html lang="zh-cmn-Hans"><head><meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"></head><body>'
+    var template = '<!DOCTYPE html><html lang="zh-cmn-Hans"><head><meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"></head><body>'
                     +' <input type="date" name="datetime" style="margin: 10px;padding:10px">'
     if(state){
         const content = fs.readFileSync(path, { encoding: 'utf-8' })
@@ -21,7 +21,7 @@ const Index = function(req, res){
             for (let i = 0; i < _content.length; i++) {
                 try {
                     const row =JSON.parse(_content[i]);
-                    tempalte+= `
+                    template+= `
                         <div style="margin-bottom: 10px; border: 1px solid #ccc;padding: 10px">
                             <div> <b> 时间：</b>  ${row.time}</div>
                             <div>  <b> 手机：</b><span style="color:red" >${row.phone}</span></div>
@@ -29,9 +29,10 @@ const Index = function(req, res){
                             <div> <b> 详情：</b> ${row.desc}</div>
                             <div> <b> ip：</b> ${row.ip}</div>
                             <div> <b> host：</b> ${row.host}</div>
-                            <div>
+                            <a href="${row.snipaste}">图片</a>
+                            <!-- <div >
                                 <img src="${row.snipaste}" style="width:50%" />
-                            </div>
+                            </div> -->
                         </div>
                     `
                 } catch (error) {
@@ -45,7 +46,7 @@ const Index = function(req, res){
     }
     res.setHeader('content-type', 'text/html;charset=UTF-8')
     /* javascript */
-    tempalte+= `
+    template+= `
         <script>
         var datetime = document.querySelector('[name="datetime"]');
         datetime.addEventListener('blur',function(e){
@@ -53,7 +54,7 @@ const Index = function(req, res){
         })
         </script>
     `
-    res.end(tempalte+'</body></html>')
+    res.end(template+'</body></html>')
 }
 
 module.exports = Index
