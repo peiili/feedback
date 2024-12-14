@@ -29,9 +29,12 @@ const Index = function(req, res){
                             <div> <b> 详情：</b> ${row.desc}</div>
                             <div> <b> ip：</b> ${row.ip}</div>
                             <div> <b> host：</b> ${row.host}</div>
-                            <div>
+                            ${
+                                row.snipaste? `<div>
                                 <img src="${row.snipaste}" style="width:50%" />
-                            </div>
+                            </div>`:''
+                            }
+                            
                         </div>
                     `
                 } catch (error) {
