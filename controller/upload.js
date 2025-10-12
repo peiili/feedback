@@ -7,7 +7,7 @@ if(!isExit){
 }
 console.log(isExit);
 const Index = function(req, res){
-    const name = req.query.name
+    const name = encodeURIComponent(req.query.name)
     let body = Buffer.alloc(0)
     req.on('data', (chunk)=> {
         body = Buffer.concat([body, chunk])
@@ -15,6 +15,7 @@ const Index = function(req, res){
 
     req.on('end', ()=> {
         const pathname = path.join(__dirname, '..', 'attachment', name)
+
         fs.writeFileSync(pathname, body)
         res.end( JSON.stringify({
             code: 200,

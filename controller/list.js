@@ -1,4 +1,36 @@
 const fs = require('fs')
+
+function getTargetValue(urlString) {
+    try {
+        const url = new URL(urlString);
+        const snId = url.searchParams.get('sn_id');
+
+        // 如果 sn_id 有有效值
+        if (snId && snId !== 'null') {
+            return snId;
+        }
+
+        // 从 from 参数中解析
+        const fromParam = url.searchParams.get('from');
+        if (fromParam) {
+            const fromUrl = new URL(decodeURIComponent(fromParam));
+            const outTradeNo = fromUrl.searchParams.get('out_trade_no');
+
+            if (outTradeNo) {
+                const parts = outTradeNo.split('-');
+                if (parts.length >= 3) {
+                    return parts[1]; // 返回中划线中间的值
+                }
+            }
+        }
+
+        return null;
+
+    } catch (error) {
+        console.error('解析错误:', error);
+        return null;
+    }
+}
 const Index = function(req, res){
     var datetime = req.query.date
     if(datetime){
@@ -21,10 +53,13 @@ const Index = function(req, res){
             for (let i = 0; i < _content.length; i++) {
                 try {
                     const row =JSON.parse(_content[i]);
+                    // 解析host，获取报告编号
+                  const reportNo = getTargetValue(row.host);
                     template+= `
                         <div style="margin-bottom: 10px; border: 1px solid #ccc;padding: 10px">
+                            <div> <b> id：</b>  ${reportNo}</div>
                             <div> <b> 时间：</b>  ${row.time}</div>
-                            <div>  <b> 手机：</b><span style="color:red" >${row.phone}</span></div>
+                            <div> <b> 手机：</b><span style="color:red" >${row.phone}</span></div>
                             <div> <b> 多选：</b> ${row.check}</div>
                             <div> <b> 详情：</b> ${row.desc}</div>
                             <div> <b> ip：</b> ${row.ip}</div>
@@ -38,12 +73,14 @@ const Index = function(req, res){
                         </div>
                     `
                 } catch (error) {
+                  console.error(error);
+
                     continue
                 }
-                
+
             }
         }else {
-            
+
         }
     }
     res.setHeader('content-type', 'text/html;charset=UTF-8')
@@ -60,4 +97,3 @@ const Index = function(req, res){
 }
 
 module.exports = Index
-

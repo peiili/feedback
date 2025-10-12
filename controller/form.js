@@ -24,9 +24,9 @@ const From = function(req, res){
             res.end(JSON.stringify({
                 code: 200,
             }))
-            return 
+            return
         }
-   
+
         const data = {
             ...body,
             time: body.time,

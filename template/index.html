@@ -107,8 +107,8 @@
         console.log(file.name);
         fileread.onload = function (e) {
             binary = e.target.result
-          
-            fetch('/feedback/upload?name='+file.name, {
+
+            fetch('/feedback/upload?name='+ encodeURIComponent(file.name), {
                 method: 'POST',
                 body: binary
             })
@@ -150,18 +150,18 @@
             case hobbies.includes('非本人支付'):
             case hobbies.includes('支付成功商家未提供商品服务'):
                 console.log('111');
-                
+
                 if(!filePath){
                     clearTimeout(timer)
                     submit.innerHTML = '提交'
                     throttle = false;
                     alert('支付相关请上传支付凭证截图')
-                    
+
                     return
 
                 }
                 break;
-        
+
             default:
                 break;
         }

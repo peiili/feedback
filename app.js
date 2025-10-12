@@ -8,13 +8,29 @@ const list = require('./controller/list')
 const upload = require('./controller/upload')
 const attachment = require('./controller/attachment')
 
+function queryCookies(req){
+    const cookie = req.headers.cookie
+    var obj = {}
+    if(cookie) {
+        const item = cookie.split(';')
+        item.forEach(e => {
+            var key = e.split('=')[0].trim()
+            var value = e.split('=')[1].trim()
+            obj[key] = value
+        });
+    }
+    req.cookies = obj;
+}
 const serve = http.createServer((req, res)=>{
+
     const method = req.method.toLocaleLowerCase()
     const query = querystring.parse(req.url.split('?')[1])
     req.query = query;
+
+    queryCookies(req, res);
     if(method==='post'){
         if(req.url==='/feedback/form'){
-            form(req, res)  
+            form(req, res)
         } else if(/\/feedback\/upload*./.test(req.url)){
             upload(req, res)
         }
